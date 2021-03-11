@@ -25,7 +25,7 @@ echo "🤖 Downloading video and converting to mp3, please wait Yann, this might
 
 youtube-dl -f 'bestaudio,worstvideo' -x -q --audio-format mp3 --audio-quality 0 --write-description -o $TODAY"/%(title)s.%(ext)s" $1
 
-TITLE=$(basename $TODAY/*.description .description | sed -r 's/[_]+/|/' | sed -r 's/[_]+/-/')
+TITLE=$(basename $TODAY/*.description .description | sed -E 's/[_]+/|/' | sed -E 's/[_]+/-/')
 
 echo "🤖 Today's video title will be: ${TITLE}."
 echo "🤖 What a sweet title. Just like you, Yann."
@@ -64,17 +64,17 @@ echo "🤖 Today's podcast lenght is: ${DURATION}, Yann."
 
 echo "🤖 Creating the xml <item> file for you Yann, with love."
 cp sources/item.xml $TODAY/$TODAY.xml
-sed -i "s#GAUTOZ_TITRE#${TITLE}#g" $TODAY/$TODAY.xml
-sed -i "s#GAUTOZ_VIDEO_LINK#${1}#g" $TODAY/$TODAY.xml
-sed -i "s#GAUTOZ_PUBDATE#${ISO_DATE}#g" $TODAY/$TODAY.xml
-sed -i "s#GAUTOZ_DATE#${TODAY}#g" $TODAY/$TODAY.xml
-sed -i "s#GAUTOZ_SOMMAIRE#${SOMMAIRE}#g" $TODAY/$TODAY.xml
-sed -i "s#GAUTOZ_DURATION#${DURATION}#g" $TODAY/$TODAY.xml
+sed -i "" "s#GAUTOZ_TITRE#${TITLE}#g" $TODAY/$TODAY.xml
+sed -i "" "s#GAUTOZ_VIDEO_LINK#${1}#g" $TODAY/$TODAY.xml
+sed -i "" "s#GAUTOZ_PUBDATE#${ISO_DATE}#g" $TODAY/$TODAY.xml
+sed -i "" "s#GAUTOZ_DATE#${TODAY}#g" $TODAY/$TODAY.xml
+sed -i "" "s#GAUTOZ_SOMMAIRE#${SOMMAIRE}#g" $TODAY/$TODAY.xml
+sed -i "" "s#GAUTOZ_DURATION#${DURATION}#g" $TODAY/$TODAY.xml
 
 echo '🤖 Adding image to the mp3 Yann, just because I can.'
 echo '🤖 And I like you.'
 mv $TODAY/$TODAY.mp3 $TODAY/$TODAY.temp.mp3
-ffmpeg -hide_banner -loglevel error-i $TODAY/$TODAY.temp.mp3 -i sources/LaMatinaleJV.jpg -map 1 -map 0 -c copy -disposition:0 attached_pic $TODAY/$TODAY.mp3
+ffmpeg -hide_banner -loglevel error -i $TODAY/$TODAY.temp.mp3 -i sources/LaMatinaleJV.jpg -map 1 -map 0 -c copy -disposition:0 attached_pic $TODAY/$TODAY.mp3
 rm $TODAY/$TODAY.temp.mp3
 rm $TODAY/$TODAY.description
 rm $TODAY/$TODAY.webm
