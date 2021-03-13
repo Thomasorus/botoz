@@ -6,7 +6,6 @@ import os
 import shutil
 import datetime
 import time
-from pytz import timezone
 import shutil
 import requests
 import re
@@ -49,7 +48,7 @@ podcast_title_cleaned = podcast_title_cleaned[0].replace(
 
 # Encode audio file to mp3
 ffmpeg_encoding = "ffmpeg -i " + podcast_name + \
-    ".opus -ar 44100 -ac 2 -b:a 128k " + podcast_name + "_temp.mp3"
+    ".m4a -ar 44100 -ac 2 -b:a 128k " + podcast_name + "_temp.mp3"
 subprocess.run(ffmpeg_encoding, shell=True)
 
 # Add image and title in metatags
@@ -59,7 +58,7 @@ ffmpeg_meta = "ffmpeg -i " + podcast_name + \
 subprocess.run(ffmpeg_meta, shell=True)
 
 # Remove old audio files
-os.remove(podcast_name + ".opus")
+os.remove(podcast_name + ".m4a")
 os.remove(podcast_name + "_temp.mp3")
 
 # Copy xml file
