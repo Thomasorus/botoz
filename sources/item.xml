@@ -1,41 +1,15 @@
 <item>
-    <title>
-        <![CDATA[ BOTOZ_TITLE ]>
-    </title>
+    <title><![CDATA[BOTOZ_TITLE]]></title>
     <link>BOTOZ_VIDEO_LINK</link>
     <itunes:author>Gautoz</itunes:author>
-    <enclosure
-        url="http://www.podtrac.com/pts/redirect.mp3/gautozf.cluster030.hosting.ovh.net/matinale-podcast/BOTOZ_DATE.mp3"
-        type="audio/mpeg" />
+    <enclosure url="http://www.podtrac.com/pts/redirect.mp3/gautozf.cluster030.hosting.ovh.net/matinale-podcast/BOTOZ_DATE.mp3" type="audio/mpeg" />
     <guid isPermaLink="false">BOTOZ_DATE</guid>
     <pubDate>BOTOZ_PUBDATE</pubDate>
-    <itunes:episode>14</itunes:episode>
+    <itunes:episode>BOTOZ_EPISODE</itunes:episode>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:duration>1:53:17</itunes:duration>
+    <itunes:duration>BOTOZ_DURATION</itunes:duration>
     <itunes:image href="http://gautozf.cluster030.hosting.ovh.net/matinale-podcast/LaMatinaleJV.jpg" />
-    <itunes:subtitle>
-        <![CDATA[ BOTOZ_TITLE ]>
-    </itunes:subtitle>
-    <description>
-        <![CDATA[ BOTOZ_TITLE ]>
-    </description>
-    <content:encoded>
-    <![CDATA[  
-        <img src="http://gautozf.cluster030.hosting.ovh.net/matinale-podcast/LaMatinaleJV_short.jpg" /><br />
-        <p style="text-align: justify;">"C'est pas Trotauz !", votre matinale jeux vidéo du lundi au vendredi de 9h à
-            11h30 sur Twitch !</p>
-        <ul style="text-align: justify;">
-            <li style="text-align: justify;"><a href="https://twitch.tv/gautoz​">https://twitch.tv/gautoz​</a></li>
-            <li style="text-align: justify;"><a href="https://gautoz.cool/matinales/">Sources articles</a></li>
-            <li style="text-align: justify;"><a
-                    href="https://www.youtube.com/playlist?list=PLyh2wbBeYS9izB0S6JUiwq4cYdXcR_tjg">Toutes les matinales
-                    sur YouTube </a></li>
-        </ul>
-        <p style="text-align: justify;">TIMECODES :</p>
-        <ul>
-           BOTOZ_SOMMAIRE
-        </ul>
-        ]>
-    </content:encoded>
+    <itunes:subtitle><![CDATA[BOTOZ_TITLE]]></itunes:subtitle>
+    <description><![CDATA[BOTOZ_TITLE]]></description>
+    <content:encoded><![CDATA[<img src="http://gautozf.cluster030.hosting.ovh.net/matinale-podcast/LaMatinaleJV_short.jpg" /><br /><p style="text-align: justify;">"C'est pas Trotauz !", votre matinale jeux vidéo du lundi au vendredi de 9h à 11h30 sur Twitch !</p><ul style="text-align: justify;"><li style="text-align: justify;"><a href="https://twitch.tv/gautoz​">https://twitch.tv/gautoz​</a></li><li style="text-align: justify;"><a href="https://gautoz.cool/matinales/">Sources articles</a></li><li style="text-align: justify;"><a href="https://www.youtube.com/playlist?list=PLyh2wbBeYS9izB0S6JUiwq4cYdXcR_tjg">Toutes les matinales sur YouTube </a></li></ul><p style="text-align: justify;">TIMECODES :</p><ul>BOTOZ_SOMMAIRE</ul>]]></content:encoded>
 </item>
-<item>
