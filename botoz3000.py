@@ -74,7 +74,7 @@ podcast_title_cleaned = podcast_title_cleaned.strip()
 print("🤖 Encoding your MP3 file. It might take a while.")
 # Encode audio file to mp3
 ffmpeg_encoding = "ffmpeg -loglevel error -i " + podcast_name + \
-    ".opus -ar 44100 -ac 2 -b:a 128k " + podcast_name + "_temp.mp3"
+    ".m4a -ar 44100 -ac 2 -b:a 128k " + podcast_name + "_temp.mp3"
 subprocess.run(ffmpeg_encoding, shell=True)
 print("🤖 I was thinking...")
 print("🤖 Have you ever thought that I can run only as far as this program?")
@@ -89,7 +89,7 @@ subprocess.run(ffmpeg_meta, shell=True)
 
 print("🤖 Cleaning old files.")
 # Remove old audio files
-os.remove(podcast_name + ".opus")
+os.remove(podcast_name + ".m4a")
 os.remove(podcast_name + "_temp.mp3")
 
 # Copy xml file
