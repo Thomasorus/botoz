@@ -24,7 +24,7 @@ subprocess.run("youtube-dl -q --skip-download --write-info-json -o temp.%\(ext\)
 read_content = open("temp.info.json", "r")
 vid_data = json.load(read_content)
 upload_date = vid_data['upload_date']
-podcast_title = vid_data['title']
+podcast_title = vid_data['title'].strip()
 podcast_date = datetime.datetime.strptime(upload_date, '%Y%m%d')
 podcast_euro_date = podcast_date.strftime('%d-%m-%Y')
 podcast_name = podcast_euro_date + "/" + podcast_euro_date
@@ -45,6 +45,7 @@ subprocess.run(youtube_download_command, shell=True)
 podcast_title_cleaned = podcast_title.rsplit('|', 1)
 podcast_title_cleaned = podcast_title_cleaned[0].replace(
     '"', "'")
+podcast_title_cleaned = podcast_title_cleaned.strip()
 
 # Encode audio file to mp3
 ffmpeg_encoding = "ffmpeg -i " + podcast_name + \
@@ -101,7 +102,7 @@ episode = last_episode + 1
 
 # Put data into xml file of the day and save it
 with open(podcast_name + ".xml") as f:
-    newText = f.read().replace('BOTOZ_TITLE', podcast_title_cleaned).replace('BOTOZ_VIDEO_LINK', vid_data["webpage_url"]).replace(
+    newText = f.read().replace('BOTOZ_TITLE', podcast_title_cleaned).replace('BOTOZ_FULL_TITLE', podcast_title).replace('BOTOZ_VIDEO_LINK', vid_data["webpage_url"]).replace(
         'BOTOZ_DATE', podcast_euro_date).replace('BOTOZ_PUBDATE', pubdate).replace("BOTOZ_DURATION", duration).replace("BOTOZ_SOMMAIRE", sommaire).replace('BOTOZ_EPISODE', str(episode))
 
 with open(podcast_name + ".xml", "w") as f:
