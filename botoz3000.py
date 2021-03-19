@@ -81,10 +81,13 @@ os.remove(podcast_name + "_temp.mp3")
 shutil.copyfile('sources/item.xml', podcast_name + ".xml")
 
 # Prepare all data needed for XML
+today = datetime.datetime.today()
 if time.localtime().tm_isdst:
     pubdate = podcast_date.strftime('%a, %d %b %Y 09:00:00 +0200')
+    lastBuildDate = today.strftime('%a, %d %b %Y %H:%M:%S +0200')
 else:
     pubdate = podcast_date.strftime('%a, %d %b %Y 09:00:00 +0100')
+    lastBuildDate = today.strftime('%a, %d %b %Y %H:%M:%S +0100')
 
 ty_res = time.gmtime(vid_data["duration"])
 duration = time.strftime("%H:%M:%S", ty_res)
@@ -130,7 +133,7 @@ with open(podcast_euro_date + "/podcast_la-matinale-jv-LEGACY.xml") as f:
     full_xml = re.sub("</itunes:explicit>",
                       "</itunes:explicit>\n\n\n" + newText + "\n", str(f.read()), 1)
     full_xml = re.sub("<lastBuildDate>.+<\/lastBuildDate>",
-                      "<lastBuildDate>" + pubdate + "</lastBuildDate>", full_xml, 1)
+                      "<lastBuildDate>" + lastBuildDate + "</lastBuildDate>", full_xml, 1)
 
 with open(podcast_euro_date + "/podcast_la-matinale-jv.xml", "w") as f:
     f.write(full_xml)
