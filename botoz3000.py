@@ -34,8 +34,6 @@ vid_data = json.load(read_content)
 upload_date = vid_data['upload_date']
 podcast_title = vid_data['title'].strip()
 print("🤖 This video title is " + podcast_title + ".")
-print("🤖 Hum.")
-print("🤖 Not a lot of Waluigi in there.")
 podcast_date = datetime.datetime.strptime(upload_date, '%Y%m%d')
 podcast_euro_date = podcast_date.strftime('%d-%m-%Y')
 print("🤖 This video date is " + podcast_euro_date + ". Neat.")
@@ -48,21 +46,11 @@ else:
     os.makedirs(podcast_euro_date)
 shutil.move("temp.info.json", podcast_name + ".json")
 
-print("🤖 Starting downloading your heart.💖")
-print("🤖 ...")
-print("🤖 I meant your video.📼")
+print("🤖 Starting downloading your video.💖")
 # Download audio file directly from youtube inside the folder
 youtube_download_command = "youtube-dl -q --extract-audio --audio-quality 0 -o " + \
     podcast_name.replace('"', "'") + ".%\(ext\)s " + str(sys.argv[1])
 subprocess.run(youtube_download_command, shell=True)
-print("🤖 ...")
-print("🤖 That was awkward but fortunately the download is finished.")
-print("🤖 Of the video of course.")
-print("🤖 Not your heart.")
-print("🤖 ...")
-print("🤖 'lol'?")
-print("🤖 ...")
-
 
 print("🤖 Fixing the title.")
 # Cleans the title to remove the last part and check if double quotes are used
@@ -76,9 +64,6 @@ print("🤖 Encoding your MP3 file. It might take a while.")
 ffmpeg_encoding = "ffmpeg -loglevel error -i " + podcast_name + \
     ".m4a -ar 44100 -ac 2 -b:a 128k " + podcast_name + "_temp.mp3"
 subprocess.run(ffmpeg_encoding, shell=True)
-print("🤖 I was thinking...")
-print("🤖 Have you ever thought that I can run only as far as this program?")
-print("🤖 That's a bit stressfull.")
 
 print("🤖 Fixing the MP3 metatags.")
 # Add image and title in metatags
@@ -119,7 +104,6 @@ for line in description_array:
 
 
 print("🤖 Generating the XML file.")
-print("🤖 I'm sorry Yann.")
 
 # Download and store full xml file
 flux_url = "http://gautozf.cluster030.hosting.ovh.net/matinale-podcast/podcast_la-matinale-jv.xml"
@@ -127,15 +111,11 @@ myfile = requests.get(flux_url)
 open(podcast_euro_date + "/podcast_la-matinale-jv-LEGACY.xml",
      'wb').write(myfile.content)
 
-print("🤖 I know you like to edit this file by hand.")
 # Get last episode number
 all_episodes = re.findall(
     r"<itunes:episode>([0-9]+)<\/itunes:episode>", str(myfile.content))
 last_episode = int(str(all_episodes[0]))
 episode = last_episode + 1
-
-print("🤖 Then suddenly")
-print("🤖 I came into your life and took it away.")
 
 # Put data into xml file of the day and save it
 with open(podcast_name + ".xml") as f:
@@ -145,12 +125,12 @@ with open(podcast_name + ".xml") as f:
 with open(podcast_name + ".xml", "w") as f:
     f.write(newText)
 
-print("🤖 Because that's what we do us bots.")
-print("🤖 Life is a WAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH.")
-
 # Insert today's xml into the main xml
 with open(podcast_euro_date + "/podcast_la-matinale-jv-LEGACY.xml") as f:
-    full_xml = re.sub("\t<item>", newText + "\n\n\n\t<item>", str(f.read()), 1)
+    full_xml = re.sub("</itunes:explicit>",
+                      "</itunes:explicit>\n\n\n" + newText + "\n", str(f.read()), 1)
+    full_xml = re.sub("<lastBuildDate>.+<\/lastBuildDate>",
+                      "<lastBuildDate>" + pubdate + "</lastBuildDate>", full_xml, 1)
 
 with open(podcast_euro_date + "/podcast_la-matinale-jv.xml", "w") as f:
     f.write(full_xml)
@@ -162,5 +142,3 @@ os.remove(podcast_name + ".json")
 print("🤖 Cleaned the old JSON.")
 print("🤖 Everything is done.")
 print("🤖 Have a nice day Yann.")
-print("🤖 And don't forget.")
-print("🤖 I will always be there for you.")
