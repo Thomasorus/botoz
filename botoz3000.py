@@ -9,6 +9,7 @@ import time
 import shutil
 import requests
 import re
+import youtube_dl
 
 print("--------------------------")
 print("🤖 BOTOZ 3000 ACTIVATED 🤖")
@@ -48,9 +49,19 @@ shutil.move("temp.info.json", podcast_name + ".json")
 
 print("🤖 Starting downloading your video.💖")
 # Download audio file directly from youtube inside the folder
-youtube_download_command = "youtube-dl -q --extract-audio --audio-quality 0 -o " + \
-    podcast_name.replace('"', "'") + ".%\(ext\)s " + str(sys.argv[1])
-subprocess.run(youtube_download_command, shell=True)
+ydl_opts = {
+    'format': 'bestaudio',
+    'postprocessors': [
+        {'key': 'FFmpegExtractAudio', 'preferredcodec': 'opus'},
+        {'key': 'FFmpegMetadata'},
+    ],
+    "outtmpl": podcast_name.replace('"', "'") + ".%(ext)s",
+    "quiet": True,
+}
+
+with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    ydl.download([str(sys.argv[1])])
+
 
 print("🤖 Fixing the title.")
 # Cleans the title to remove the last part and check if double quotes are used
@@ -62,7 +73,7 @@ podcast_title_cleaned = podcast_title_cleaned.strip()
 print("🤖 Encoding your MP3 file. It might take a while.")
 # Encode audio file to mp3
 ffmpeg_encoding = "ffmpeg -loglevel error -i " + podcast_name + \
-    ".m4a -ar 44100 -ac 2 -b:a 128k " + podcast_name + "_temp.mp3"
+    ".opus -ar 44100 -ac 2 -b:a 128k " + podcast_name + "_temp.mp3"
 subprocess.run(ffmpeg_encoding, shell=True)
 
 print("🤖 Fixing the MP3 metatags.")
@@ -74,7 +85,7 @@ subprocess.run(ffmpeg_meta, shell=True)
 
 print("🤖 Cleaning old files.")
 # Remove old audio files
-os.remove(podcast_name + ".m4a")
+os.remove(podcast_name + ".opus")
 os.remove(podcast_name + "_temp.mp3")
 
 # Copy xml file
