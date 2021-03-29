@@ -1,103 +1,70 @@
-import sys
-import subprocess
-import random
-import json
-import os
-import shutil
-import datetime
-import time
-import shutil
-import requests
-import re
 import youtube_dl
+import re
+import requests
+import time
+import datetime
+import os
+import random
+import sys
+config_file = __import__('config')
+youtube = __import__('youtube')
+
+# Arguments
+command = sys.argv[1]
+show_name = sys.argv[2]
+url = sys.argv[3]
+
+# Recovering the right config file and creating the object that will be used everywhere
+show_config = config_file.podcasts[show_name]
 
 print("--------------------------")
-print("🤖 BOTOZ 3000 ACTIVATED 🤖")
+print("🤖 " + show_config["general"]["script_name"] + " ACTIVATED 🤖")
 print("--------------------------")
+print("🤖 Hello " + show_config["general"]["user_name"] + "!")
+print("🤖 The show is " + show_config["general"]["name"] + ".")
 
-upload_date = ""
-podcast_title = ""
-podcast_date = ""
-podcast_euro_date = ""
-podcast_name = ""
-
-print("🤖 Hello Yann!")
-print("🤖 Starting my engine, just for you.⚙️")
-
-print("🤖 Recovering the video's JSON file.")
-# Recover the json associated with the video
-subprocess.run("youtube-dl -q --skip-download --write-info-json -o temp.%\(ext\)s " +
-               str(sys.argv[1]), shell=True)
-
-# Open Json, create folder with the video upload date and move the file inside
-read_content = open("temp.info.json", "r")
-vid_data = json.load(read_content)
-upload_date = vid_data['upload_date']
-podcast_title = vid_data['title'].strip()
-print("🤖 This video title is " + podcast_title + ".")
-podcast_date = datetime.datetime.strptime(upload_date, '%Y%m%d')
-podcast_euro_date = podcast_date.strftime('%d-%m-%Y')
-print("🤖 This video date is " + podcast_euro_date + ". Neat.")
-podcast_name = podcast_euro_date + "/" + podcast_euro_date
-print("🤖 Creating the podcast's folder.")
-if os.path.exists(podcast_euro_date):
-    shutil.rmtree(podcast_euro_date)
-    os.makedirs(podcast_euro_date)
+if command == "yt-mp3":
+    print("🤖 You want to turn a Youtube video into mp3.")
+    youtube.video_to_show(show_config, url)
+elif command == "mp3-xml":
+    print("🤖 You want to generate am xml item file from an mp3 file.")
+elif command == "ch-xml":
+    print("🤖 You want to generate an XML channel file from the config file.")
+elif command == "yt-pl":
+    print("🤖 You want to turn an entire youtube playlist to a podcast.")
 else:
-    os.makedirs(podcast_euro_date)
-shutil.move("temp.info.json", podcast_name + ".json")
+    print("🤖 Your command is not valid")
 
-print("🤖 Starting downloading your video.💖")
-# Download audio file directly from youtube inside the folder
-ydl_opts = {
-    'format': 'bestaudio',
-    'postprocessors': [
-        {'key': 'FFmpegExtractAudio', 'preferredcodec': 'opus'},
-        {'key': 'FFmpegMetadata'},
-    ],
-    "outtmpl": podcast_name.replace('"', "'") + ".%(ext)s",
-    "quiet": True,
-}
-
-with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-    ydl.download([str(sys.argv[1])])
+print("🤖 Everything is done.")
+print("🤖 Have a nice day " + show_config["general"]["user_name"] + "!")
 
 
-print("🤖 Fixing the title.")
-# Cleans the title to remove the last part and check if double quotes are used
-podcast_title_cleaned = podcast_title.rsplit('|', 1)
-podcast_title_cleaned = podcast_title_cleaned[0].replace(
-    '"', "'")
-podcast_title_cleaned = podcast_title_cleaned.strip()
-
-print("🤖 Encoding your MP3 file. It might take a while.")
-# Encode audio file to mp3
-ffmpeg_encoding = "ffmpeg -loglevel error -i " + podcast_name + \
-    ".opus -ar 44100 -ac 2 -b:a 128k " + podcast_name + "_temp.mp3"
-subprocess.run(ffmpeg_encoding, shell=True)
-
-print("🤖 Fixing the MP3 metatags.")
-# Add image and title in metatags
-ffmpeg_meta = "ffmpeg -loglevel error -i " + podcast_name + \
-    '_temp.mp3 -i sources/img.jpg -c copy -map 0 -map 1 -metadata title="' + \
-    str(podcast_title_cleaned) + '" ' + podcast_name + ".mp3"
-subprocess.run(ffmpeg_meta, shell=True)
+# print("🤖 Fixing the MP3 metatags.")
+# # Add image and title in metatags
+# ffmpeg_meta = "ffmpeg -loglevel error -i " + podcast["episode"]["podcast_folder_file"] + \
+#     '_temp.mp3 -i sources/img.jpg -c copy -map 0 -map 1 -metadata title="' + \
+#     str(podcast["episode"]["short_title"]) + '" ' + \
+#     podcast["episode"]["podcast_folder_file"] + ".mp3"
+# subprocess.run(ffZmpeg_meta, shell=True)
 
 print("🤖 Cleaning old files.")
 # Remove old audio files
-os.remove(podcast_name + ".opus")
-os.remove(podcast_name + "_temp.mp3")
+# os.remove(podcast["episode"]["podcast_folder_file"] + ".opus")
+# os.remove(podcast["episode"]["podcast_folder_file"] + "_temp.mp3")
 
 # Copy xml file
-shutil.copyfile('sources/item.xml', podcast_name + ".xml")
+shutil.copyfile('sources/item.xml',
+                podcast["episode"]["podcast_folder_file"] + ".xml")
 
 # Prepare all data needed for XML
 today = datetime.datetime.today()
 if time.localtime().tm_isdst:
-    pubdate = podcast_date.strftime('%a, %d %b %Y 09:00:00 +0200')
+    pubdate = podcast["episode"]["upload_date"].strftime(
+        '%a, %d %b %Y 09:00:00 +0200')
     lastBuildDate = today.strftime('%a, %d %b %Y %H:%M:%S +0200')
 else:
-    pubdate = podcast_date.strftime('%a, %d %b %Y 09:00:00 +0100')
+    pubdate = podcast["episode"]["upload_date"].strftime(
+        '%a, %d %b %Y 09:00:00 +0100')
     lastBuildDate = today.strftime('%a, %d %b %Y %H:%M:%S +0100')
 
 ty_res = time.gmtime(vid_data["duration"])
@@ -120,19 +87,16 @@ for line in description_array:
 print("🤖 Generating the XML file.")
 
 # Download and store full xml file
-flux_url = "http://gautozf.cluster030.hosting.ovh.net/matinale-podcast/podcast_la-matinale-jv.xml"
-myfile = requests.get(flux_url)
-open(podcast_euro_date + "/podcast_la-matinale-jv-LEGACY.xml",
-     'wb').write(myfile.content)
+podcast["item"]["main_xml_url"] = get_full_xml(podcast)
 
-# Get last episode number
-all_episodes = re.findall(
-    r"<itunes:episode>([0-9]+)<\/itunes:episode>", str(myfile.content))
-last_episode = int(str(all_episodes[0]))
-episode = last_episode + 1
+# Get episode
+podcast["item"]["itunes_episode"] = get_episode_number(
+    podcast["item"]["main_xml_url"])
+
+print(podcast["item"]["itunes_episode"])
 
 # Put data into xml file of the day and save it
-with open(podcast_name + ".xml") as f:
+with open(podcast["episode"]["podcast_folder_file"] + ".xml") as f:
     newText = f.read().replace('BOTOZ_TITLE', podcast_title_cleaned).replace('BOTOZ_FULL_TITLE', podcast_title).replace('BOTOZ_VIDEO_LINK', vid_data["webpage_url"]).replace(
         'BOTOZ_DATE', podcast_euro_date).replace('BOTOZ_PUBDATE', pubdate).replace("BOTOZ_DURATION", duration).replace("BOTOZ_SOMMAIRE", sommaire).replace('BOTOZ_EPISODE', str(episode))
 
@@ -154,5 +118,24 @@ print("🤖 XML files created.")
 os.remove(podcast_name + ".json")
 
 print("🤖 Cleaned the old JSON.")
-print("🤖 Everything is done.")
-print("🤖 Have a nice day Yann.")
+
+
+def fill_item(podcast):
+    podcast[item]["title"] = podcast[episode]["short_title"]
+    podcast[item]["link"] = podcast["episode"]["video_url"]
+    podcast[item]["guid"] = podcast["episode"]["euro_date"]
+    podcast[item]["pub_date"] = podcast["episode"]["video_url"]
+    # TODO : Function to retrieve episodes
+    podcast[item]["itunes_episode"] = ""
+    podcast[item]["itunes_duration"] = ""
+    podcast[item]["itunes_subtitle"] = podcast[episode]["title"]
+    podcast[item]["itunes_description"] = podcast[episode]["title"]
+    podcast[item]["content_encoded_timestamps"] = ""
+    return podcast
+
+
+def get_full_xml(podcast):
+    myfile = requests.get(podcast["general"]["main_xml_url"])
+    open(podcast["episode"]["podcast_folder"] +
+         "/" + podcast["episode"]["podcast_folder"] + "_LEGACY.xml", 'wb').write(myfile.content)
+    return myfile.content
