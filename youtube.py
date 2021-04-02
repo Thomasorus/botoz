@@ -3,6 +3,7 @@ import datetime
 import json
 import shutil
 import subprocess
+import os
 
 utils = __import__('utils')
 
@@ -47,22 +48,30 @@ def video_to_show(show, video_url):
                          show["general"]["youtube-dl_quiet"])
     print("🤖 Download complete.")
 
+    # Generates the FFMPEG command from the mp3 options
+    ffmpeg_encode_command = utils.get_ffmpeg_download_command(
+        show["mp3"], show["general"]["ffmpeg_quiet"], path_folder_file + ".m4a", path_folder_file + "_encoded.mp3")
+
+    # Convert to mp3
+    # subprocess.run(ffmpeg_encode_command, shell=True)
+
     # Cleans the title to remove the last part and check if double quotes are used
     ep_title_shortened = ep_title.rsplit('|', 1)[0].replace('"', "'").strip()
 
-    # Generates the FFMPEG command from the mp3 options
-    ffmpeg_command = utils.get_ffmpeg_download_command(
-        show["mp3"], path_folder_file, show["general"]["ffmpeg_quiet"])
+    # Get the ffmpeg command to add title
+    ffmpeg_title_command = utils.get_ffmpeg_title_cmd(
+        ep_title_shortened, show["general"]["ffmpeg_quiet"], path_folder_file + "_encoded.mp3", path_folder_file + "_titled.mp3")
 
-    # Convert to mp3
-    subprocess.run(ffmpeg_command, shell=True)
+    # Add title
+    subprocess.run(ffmpeg_title_command, shell=True)
 
-    # ffmpeg_meta = "ffmpeg -loglevel error -i " + podcast["episode"]["podcast_folder_file"] + \
-    #     '_temp.mp3 -i sources/img.jpg -c copy -map 0 -map 1 -metadata title="' + \
-    #     str(podcast["episode"]["short_title"]) + '" ' + \
-    #     podcast["episode"]["podcast_folder_file"] + ".mp3"
+    ffmpeg_image_command = utils.get_ffmpeg_image_cmd(
+        "sources/img.jpg", show["general"]["ffmpeg_quiet"], path_folder_file + "_titled.mp3", path_folder_file + ".mp3")
+    subprocess.run(ffmpeg_image_command, shell=True)
 
-    # subprocess.run(ffZmpeg_meta, shell=True)
+    os.remove(path_folder_file + "_encoded.mp3")
+    os.remove(path_folder_file + "_titled.mp3")
+    os.remove(path_folder_file + ".m4a")
 
     # NEXT : functions for adding image, metatag title, metatag chapters
     # NEXT : Fill in the item dictionnary and the channel dictionnary

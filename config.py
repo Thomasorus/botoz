@@ -19,7 +19,7 @@ podcasts = {
             "frequency": "44100",  # 44100, 48000
             "component": "stereo",  # stereo or mono
             "bitrate": "CBR",  # CBR or VBR
-            "CBR_quality": "320",  # 64, 80, 96, 112, 128, 160, 192, 224, 256, or 320
+            "CBR_quality": "128",  # 64, 80, 96, 112, 128, 160, 192, 224, 256, or 320
             "VBR_quality": "9",  # 0 to 9, 0 is best, 9 is worse (see Readme)
         },
 
