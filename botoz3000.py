@@ -53,38 +53,38 @@ print("🤖 Cleaning old files.")
 # os.remove(podcast["episode"]["podcast_folder_file"] + "_temp.mp3")
 
 # Copy xml file
-shutil.copyfile('sources/item.xml',
-                podcast["episode"]["podcast_folder_file"] + ".xml")
+# shutil.copyfile('sources/item.xml',
+#                 podcast["episode"]["podcast_folder_file"] + ".xml")
 
-# Prepare all data needed for XML
-today = datetime.datetime.today()
-if time.localtime().tm_isdst:
-    pubdate = podcast["episode"]["upload_date"].strftime(
-        '%a, %d %b %Y 09:00:00 +0200')
-    lastBuildDate = today.strftime('%a, %d %b %Y %H:%M:%S +0200')
-else:
-    pubdate = podcast["episode"]["upload_date"].strftime(
-        '%a, %d %b %Y 09:00:00 +0100')
-    lastBuildDate = today.strftime('%a, %d %b %Y %H:%M:%S +0100')
+# # Prepare all data needed for XML
+# today = datetime.datetime.today()
+# if time.localtime().tm_isdst:
+#     pubdate = podcast["episode"]["upload_date"].strftime(
+#         '%a, %d %b %Y 09:00:00 +0200')
+#     lastBuildDate = today.strftime('%a, %d %b %Y %H:%M:%S +0200')
+# else:
+#     pubdate = podcast["episode"]["upload_date"].strftime(
+#         '%a, %d %b %Y 09:00:00 +0100')
+#     lastBuildDate = today.strftime('%a, %d %b %Y %H:%M:%S +0100')
 
-ty_res = time.gmtime(vid_data["duration"])
-duration = time.strftime("%H:%M:%S", ty_res)
+# ty_res = time.gmtime(vid_data["duration"])
+# duration = time.strftime("%H:%M:%S", ty_res)
 
-description_array = vid_data["description"].split("\n")
+# description_array = vid_data["description"].split("\n")
 
-is_sommaire = False
-sommaire = ""
-for line in description_array:
-    if line != "":
-        if "00:00" in line:
-            is_sommaire = True
-        if "---" in line:
-            is_sommaire = False
-        if is_sommaire == True:
-            sommaire += "<li style ='text-align: justify;'> " + line + " </li>"
+# is_sommaire = False
+# sommaire = ""
+# for line in description_array:
+#     if line != "":
+#         if "00:00" in line:
+#             is_sommaire = True
+#         if "---" in line:
+#             is_sommaire = False
+#         if is_sommaire == True:
+#             sommaire += "<li style ='text-align: justify;'> " + line + " </li>"
 
 
-print("🤖 Generating the XML file.")
+# print("🤖 Generating the XML file.")
 
 # Download and store full xml file
 podcast["item"]["main_xml_url"] = get_full_xml(podcast)
