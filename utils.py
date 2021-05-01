@@ -102,7 +102,8 @@ def get_pubdate(ep_upload_date, fixed_hour):
         return iso_date.strftime('%a, %d %b %Y ' + fixed_hour + ' +0100')
 
 
-def get_last_build_Date(today):
+def get_last_build_Date():
+    today = datetime.datetime.today()
     if time.localtime().tm_isdst:
         return today.strftime('%a, %d %b %Y %H:%M:%S +0200')
     else:
@@ -122,19 +123,6 @@ def get_youtube_chapters(description):
             if is_chapter == True:
                 chapters += "<li style ='text-align: justify;'> " + line + " </li>"
     return chapters
-
-
-def get_full_xml(url, path):
-    myfile = requests.get(url)
-    open(path + "_LEGACY.xml", 'wb').write(myfile.content)
-    return myfile.content
-
-
-def get_episode_number(xml_content):
-    all_episodes = xml_content.findall(
-        r"<itunes:episode>([0-9]+)<\/itunes:episode>", str(xml_content))
-    last_episode = int(str(all_episodes[0]))
-    return last_episode + 1
 
 
 def create_content(header, chapters, footer):
