@@ -6,9 +6,9 @@ import subprocess
 import os
 
 utils = __import__('utils')
+xml = __import__('xml')
 
 # This function converts a youtube video to a mp3 file and creates the associated xml files
-
 
 def video_to_show(show, video_url):
 
@@ -53,7 +53,7 @@ def video_to_show(show, video_url):
         show["mp3"], show["general"]["ffmpeg_quiet"], path_folder_file + ".m4a", path_folder_file + "_encoded.mp3")
 
     # Convert to mp3
-    # subprocess.run(ffmpeg_encode_command, shell=True)
+    subprocess.run(ffmpeg_encode_command, shell=True)
 
     # Cleans the title to remove the last part and check if double quotes are used
     ep_title_shortened = ep_title.rsplit('|', 1)[0].replace('"', "'").strip()
@@ -63,11 +63,11 @@ def video_to_show(show, video_url):
         ep_title_shortened, show["general"]["ffmpeg_quiet"], path_folder_file + "_encoded.mp3", path_folder_file + "_titled.mp3")
 
     # Add title
-    # subprocess.run(ffmpeg_title_command, shell=True)
+    subprocess.run(ffmpeg_title_command, shell=True)
 
     ffmpeg_image_command = utils.get_ffmpeg_image_cmd(
         "sources/img.jpg", show["general"]["ffmpeg_quiet"], path_folder_file + "_titled.mp3", path_folder_file + ".mp3")
-    # subprocess.run(ffmpeg_image_command, shell=True)
+    subprocess.run(ffmpeg_image_command, shell=True)
 
     # os.remove(path_folder_file + "_encoded.mp3")
     # os.remove(path_folder_file + "_titled.mp3")
@@ -79,10 +79,10 @@ def video_to_show(show, video_url):
         ep_upload_date, show["item"]["pub_date_hour"])
     ep_duration = utils.get_duration(vid_data['duration'])
 
-    full_xml_content = utils.get_full_xml(
+    full_xml_content = xml.get_full_xml(
         show["general"]["main_xml_url"], path_folder_file)
 
-    ep_number = utils.get_episode_number(full_xml_content)
+    ep_number = xml.get_episode_number(full_xml_content)
 
     ep_youtube_chapters = utils.get_youtube_chapters(vid_data["description"])
 
@@ -99,5 +99,6 @@ def video_to_show(show, video_url):
     show["item"]["itunes_description"] = ep_title
     show["item"]["content_encoded_timestamps"] = ep_content
 
-    # NEXT : Fill in the item dictionnary and the channel dictionnary
+    show["channel"]["last_build_date"] = utils.get_last_build_Date()
+
     # NEXT : Create functions to generate item and channel
