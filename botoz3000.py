@@ -8,6 +8,7 @@ import random
 import sys
 config_file = __import__('config')
 youtube = __import__('youtube')
+xml = __import__('mp3_to_xml')
 
 # Arguments
 command = sys.argv[1]
@@ -28,6 +29,7 @@ if command == "yt-mp3":
     youtube.video_to_show(show_config, url)
 elif command == "mp3-xml":
     print("🤖 You want to generate am xml item file from an mp3 file.")
+    xml.mp3_to_item(show_config, url)
 elif command == "ch-xml":
     print("🤖 You want to generate an XML channel file from the config file.")
 elif command == "yt-pl":
@@ -87,13 +89,13 @@ print("🤖 Cleaning old files.")
 # print("🤖 Generating the XML file.")
 
 # Download and store full xml file
-podcast["item"]["main_xml_url"] = get_full_xml(podcast)
+# podcast["item"]["main_xml_url"] = get_full_xml(podcast)
 
 # Get episode
-podcast["item"]["itunes_episode"] = get_episode_number(
-    podcast["item"]["main_xml_url"])
+# podcast["item"]["itunes_episode"] = get_episode_number(
+#     podcast["item"]["main_xml_url"])
 
-print(podcast["item"]["itunes_episode"])
+# print(podcast["item"]["itunes_episode"])
 
 # Put data into xml file of the day and save it
 with open(podcast["episode"]["podcast_folder_file"] + ".xml") as f:

@@ -127,3 +127,42 @@ def get_youtube_chapters(description):
 
 def create_content(header, chapters, footer):
     return header + "\n" + chapters + "\n" + footer
+
+
+def get_full_xml(url, path):
+    myfile = requests.get(url)
+    open(path + "_LEGACY.xml", 'wb').write(myfile.content)
+    return myfile.content
+
+def get_episode_number(xml_content):
+    all_episodes = xml_content.findall(
+        r"<itunes:episode>([0-9]+)<\/itunes:episode>", str(xml_content))
+    last_episode = int(str(all_episodes[0]))
+    return last_episode + 1
+
+def create_xml_item(show, path):
+    item = "<item>\n"
+    item += "\t<title>"+ show["title"] + "</title>\n"
+    item += "\t<link>" + show["link"] + "</link>\n"
+    item += "\t<itunes:author>" + show["itunes_author"] + "</itunes:author>\n"
+    item += "\t<enclosure url='" + show["enclosure_url"] + "' type='audio/mpeg'/>\n"
+    item += "\t<guid isPermaLink='" + show["guid_permalink"] + "'>" + show["guid"] + "</guid>\n"
+    item += "\t<pubDate>" + show["pub_date"] + "</pubDate>\n"
+    item += "\t<itunes:episode>" + show["itunes_episode"] + "</itunes:episode>\n"
+    item += "\t<itunes:episodeType>" + show["itunes_episode_type"] + "</itunes:episodeType>\n"
+    item += "\t<itunes:duration>" + show["itunes_duration"] + "</itunes:duration>\n"
+    item += "\t<itunes:image href='" + show["itunes_image"] + "'/>\n"
+    item += "\t<itunes:subtitle>" + show["itunes_subtitle"] + "</itunes:subtitle>\n"
+    item += "\t<description>" + show["itunes_description"] + "</description>\n"
+    item += "\t<content:encoded>\n\t\t" + show["content_encoded_header"] + show["content_encoded_main"] + show["content_encoded_timestamps"] + show["content_encoded_footer"] + "\n"
+    item += "\t</content:encoded>\n"
+    item += "</item>"
+    if os.path.exists(path):
+        os.remove(path)
+    f = open(path, "a")
+    f.write(item)
+    f.close()
+
+def get_metadatas(file, path):
+    command = "ffprobe -print_format json -show_format -show_streams " + file + " > " + path + "/" + file + ".json"
+    subprocess.run(command, shell=True)    
