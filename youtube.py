@@ -6,7 +6,6 @@ import subprocess
 import os
 
 utils = __import__('utils')
-xml = __import__('xml')
 
 # This function converts a youtube video to a mp3 file and creates the associated xml files
 
@@ -79,10 +78,10 @@ def video_to_show(show, video_url):
         ep_upload_date, show["item"]["pub_date_hour"])
     ep_duration = utils.get_duration(vid_data['duration'])
 
-    full_xml_content = xml.get_full_xml(
+    full_xml_content = utils.get_full_xml(
         show["general"]["main_xml_url"], path_folder_file)
 
-    ep_number = xml.get_episode_number(full_xml_content)
+    ep_number = utils.get_episode_number(full_xml_content)
 
     ep_youtube_chapters = utils.get_youtube_chapters(vid_data["description"])
 
@@ -100,5 +99,7 @@ def video_to_show(show, video_url):
     show["item"]["content_encoded_timestamps"] = ep_content
 
     show["channel"]["last_build_date"] = utils.get_last_build_Date()
+
+    
 
     # NEXT : Create functions to generate item and channel
