@@ -1,5 +1,6 @@
 import json
 import datetime
+import os
 
 utils = __import__('utils')
 
@@ -28,7 +29,13 @@ def mp3_to_item(show, file):
         show["item"]["itunes_description"] = tags["comment"]
         show["item"]["content_encoded_main"] = tags["comment"]
 
-        utils.create_xml_item(show["item"], path_show_file + "/" + file + ".xml")
+        item_text = utils.create_xml_item(show["item"], path_show_file + "/" + file + ".xml")
+
+        legacy_xml = utils.get_full_xml(show["general"]["main_xml_url"], path_show_file + "/" + today  + "_" + show["general"]["name"])
+
+        utils.insert_item(item_text, path_show_file + "/" + today  + "_" + show["general"]["name"] + "_LEGACY.xml", path_show_file + "/" + today  + "_" + show["general"]["name"])
+
+        os.remove(path_show_file + "/" + file + ".json")
 
 
-            
+    
