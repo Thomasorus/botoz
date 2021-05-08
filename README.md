@@ -1,7 +1,15 @@
-# 🤖 BOTOZ 3000 🤖
+# 🤖 BOTOZ 🤖
 
-A python 3 script that download youtube videos, convert them to mp3, generate an XML file.
-Extremely opiniated to work for a specific use case, and talks too much.
+> A bunch of command line scripts to automate repetitive tasks podcasters have to do.
+
+## The tasks
+
+Botoz can execute 3 tasks:
+
+- Turn a youtube video to an mp3 file, create an xml file with the `<item>` part pre-filled, then update the main xml file.
+- Create an xml file with the `<item>` part prefilled with the metadata found inside an existing mp3 file, then update the main xml file.
+- Create an xml file with the `<channel>` part automatically written from the config file.
+
 
 ## How to use
 
@@ -15,7 +23,7 @@ This file contains the configuration for all your podcasts. You can have just on
 podcasts = {
     "default": {
 ```
-Followed by a lot of text. This is the sample/example of a podcast. Copy paste everything starting from line 4 and paste it at the end before the final bracker. Rename the `default` you just pasted to the podcast you want to manage.
+Followed by a lot of text. This is the sample/example of a podcast. Copy paste everything starting from line 4 and paste it at the end before the final bracket. Rename the `default` you just pasted to the podcast you want to manage.
 
 Then fill in everything:
 
@@ -24,43 +32,59 @@ Then fill in everything:
 - `channel` contains the podcast `<channel>` informations required to build an XML podcast file.
 - `item` contains the podcast `<item>` informations required to generate an entry.
 
-Each line has an explanation about what it's used for. **If a line does not have an explanation, it means you don't have to touch it and it will be filled by the program**.
-
-### The tasks
-
-Botoz3000 can execute several tasks
-
-- `yt-mp3` turns a youtube video to an mp3 file with its xml item file and updated the main xml file if its url is entered inside `config.py` (`main_xml_url`) **(WORK IN PROGRESS)**
-- `mp3-xml` creates an xml item file from the metadata found inside an mp3 file **(TO DO)**
-- `ch-xml` creates an RSS xml file from the channel options **(TO DO)**
-- `yt-pl` turns an entire youtube playlist into a complete RSS xml file and converts all episodes **(TO DO)**
+Each line has an explanation about what it's used for. **If a line does not have an explanation, it means you don't have to touch it and it will be filled by Botoz**.
 
 ### The command line
 
 Once the podcast configuration is done, use the command line this way:
 
-- `./botoz3000.sh your_podcast your_command file_or_url`
+- `./botoz3000.sh your_command your_podcast file_or_url`
 
 For example, to download a youtube video and turn it into a podcast:
 
 Download the files, go to the folder, open a terminal and type:
 
-- `./botoz3000.sh default yt-mp3 https://www.youtube.com/watch?v=yBLdQ1a4-JI`
+- `./botoz3000.sh yt-mp3 default https://www.youtube.com/watch?v=yBLdQ1a4-JI`
 
 Let the script work, it will return to you a mp3 and an xml file in a folder.
 
 ## Requirements
 
-You need:
+You need to install:
 
 - youtube-dl
 - ffmpeg
-- requests (python package)
+- requests
+
+On MacOS you can use Brew to install youtube-dl and ffmpeg:
+
+- `brew install youtube-dl`
+- `brew install ffmpeg`
+
+But you'll also need to use the Python package manager:
+
+- `pip3 install requests`
+
+On Ubuntu:
+
+- `pip3 install youtube-dl`
+- `pip3 install ffmpeg`
+- `pip3 install requests`
+
+On windows:
+
+- **Not tested for now**
+- Download Python 3 [here](https://www.python.org/downloads/)
+- `pip3 install youtube-dl`
+- `pip3 install ffmpeg`
+- `pip3 install requests`
 
 
 ## About MP3 quality
 
 ### VBR table
+
+Use this table to choose the quality of your mp3 files.
 
 [More info](https://trac.ffmpeg.org/wiki/Encode/MP3)
 
@@ -82,4 +106,4 @@ You need:
 
 ## License
 
-See license file
+Botoz is a free to use by individuals and organizations that do not operate by capitalist principles. For more information see the license file.
