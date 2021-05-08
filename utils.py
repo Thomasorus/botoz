@@ -182,3 +182,34 @@ def insert_item(item, legacy_location, path):
 
     with open(path + ".xml", "w") as f:
         f.write(full_xml)
+
+
+def create_channel_file(show, path):
+    channel = "<?xml version='1.0' encoding='utf-8' ?>\n"
+    channel += "<rss xmlns:itunes='http://www.itunes.com/dtds/podcast-1.0.dtd' version='2.0' xmlns:googleplay='http://www.google.com/schemas/play-podcasts/1.0' xmlns:content='http://purl.org/rss/1.0/modules/content/' xmlns:wfw='http://wellformedweb.org/CommentAPI/' xmlns:dc='http://purl.org/dc/elements/1.1/' xmlns:media='http://www.rssboard.org/media-rss'>\n"
+    channel += "<channel>\n"
+    channel += "\t<title>"+ show["channel"]["title"] + "</title>\n"
+    channel += "\t<itunes:author>" + show["channel"]["itunes_author"] + "</itunes:author>\n"
+    channel += "\t<itunes:owner><itunes:email>" + show["channel"]["itunes_owner_email"] + "</itunes:email></itunes:owner>\n"
+    channel += "\t<itunes:category text='" + show["channel"]["itunes_category_main"] + "'></itunes:category>  \n"
+    channel += "\t<link>" + show["channel"]["link"] + "</link>\n"
+    channel += "\t<itunes:summary>" + show["channel"]["itunes_summary"] + "</itunes:summary>\n"
+    channel += "\t<description>" + show["channel"]["itunes_description"] + "</description>\n"
+    channel += "\t<itunes:type>" + show["channel"]["itunes_type"] + "</itunes:type>\n"
+    channel += "\t<language>" + show["channel"]["language"] + "</language>\n"
+    channel += "\t<lastBuildDate>" + get_last_build_Date()  + "</lastBuildDate>\n"
+    channel += "\t<copyright>" + show["channel"]["copyright"] + "</copyright>\n"
+    channel += "\t<image>\n"
+    channel += "\t\t<url>" + show["channel"]["image_url"] + "</url>\n"
+    channel += "\t\t<title>" + show["channel"]["image_text"] + "</title>\n" 
+    channel += "\t\t<link>" + show["channel"]["image_link"] + "</link>\n" 
+    channel += "\t</image>\n"
+    channel += "\t<itunes:image>" + show["channel"]["itunes_image"] + "</itunes:image>\n"
+    channel += "\t<itunes:explicit>" + show["channel"]["itunes_explicit"] + "</itunes:explicit>\n"
+    channel += "\n"
+    channel += "</channel>\n"
+    if os.path.exists(path):
+        os.remove(path)
+
+    with open(path, "w") as f:
+        f.write(channel)

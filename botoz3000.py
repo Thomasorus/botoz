@@ -9,7 +9,7 @@ import sys
 config_file = __import__('config')
 youtube = __import__('youtube')
 mp3_xml = __import__('mp3_to_xml')
-conf_xml = __import__('mp3_to_xml')
+conf_xml = __import__('conf_to_xml')
 
 
 # Arguments
@@ -33,7 +33,7 @@ elif command == "mp3-xml":
     print("🤖 You want to generate am xml item file from an mp3 file.")
     mp3_xml.mp3_to_item(show_config, url)
 elif command == "conf-xml":
-    conf_xml.config_to_xml(show_config, url)
+    conf_xml.config_to_xml(show_config)
     print("🤖 You want to generate an XML channel file from the config file.")
 else:
     print("🤖 Your command is not valid")
