@@ -4,6 +4,7 @@ import datetime
 import os
 import youtube_dl
 import requests
+import re
 
 
 def youtube_get_json(url):
@@ -159,10 +160,25 @@ def create_xml_item(show, path):
     item += "</item>"
     if os.path.exists(path):
         os.remove(path)
-    f = open(path, "a")
-    f.write(item)
-    f.close()
+
+    with open(path, "w") as f:
+        f.write(item)
+    
+    return item
+
 
 def get_metadatas(file, path):
     command = "ffprobe -print_format json -show_format -show_streams " + file + " > " + path + "/" + file + ".json"
     subprocess.run(command, shell=True)    
+
+def insert_item(item, legacy_location, path):
+    
+    with open(legacy_location) as f:
+        full_xml = re.sub("</itunes:explicit>", "</itunes:explicit>\n\n\n" + item + "\n", str(f.read()), 1)
+        full_xml = re.sub("<lastBuildDate>.+<\/lastBuildDate>", "<lastBuildDate>" + get_last_build_Date() + "</lastBuildDate>", full_xml, 1)
+
+    if os.path.exists(path + ".xml"):
+        os.remove(path + ".xml")
+
+    with open(path + ".xml", "w") as f:
+        f.write(full_xml)
