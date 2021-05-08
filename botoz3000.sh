@@ -1,1 +1,1 @@
-python3 botoz3000.py $1
+python3 botoz3000.py $1 $2 $3
