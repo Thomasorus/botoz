@@ -100,6 +100,11 @@ def video_to_show(show, video_url):
 
     show["channel"]["last_build_date"] = utils.get_last_build_Date()
 
-    
+    item_text = utils.create_xml_item(show, path_folder_file)
 
-    # NEXT : Create functions to generate item and channel
+    legacy_xml = utils.get_full_xml(show["general"]["main_xml_url"], path_folder_file + "/" + today  + "_" + show["general"]["name"])
+
+    utils.insert_item(item_text, path_folder_file + "/" + today  + "_" + show["general"]["name"] + "_LEGACY.xml", path_folder_file + "/" + today  + "_" + show["general"]["name"])
+
+    os.remove(path_folder_file + "/" + file + ".json")
+
