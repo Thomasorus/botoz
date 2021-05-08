@@ -68,11 +68,11 @@ def video_to_show(show, video_url):
         "sources/img.jpg", show["general"]["ffmpeg_quiet"], path_folder_file + "_titled.mp3", path_folder_file + ".mp3")
     subprocess.run(ffmpeg_image_command, shell=True)
 
-    # os.remove(path_folder_file + "_encoded.mp3")
-    # os.remove(path_folder_file + "_titled.mp3")
-    # os.rename(path_folder_file + ".mp3",
-    #           path_episode_folder + "/" + show_date + ".mp3")
-    # os.remove(path_folder_file + ".m4a")
+    os.remove(path_folder_file + "_encoded.mp3")
+    os.remove(path_folder_file + "_titled.mp3")
+    os.rename(path_folder_file + ".mp3",
+              path_episode_folder + "/" + show_date + ".mp3")
+    os.remove(path_folder_file + ".m4a")
 
     ep_pubdate = utils.get_pubdate(
         ep_upload_date, show["item"]["pub_date_hour"])
