@@ -34,19 +34,22 @@ Then fill in everything:
 
 Each line has an explanation about what it's used for. **If a line does not have an explanation, it means you don't have to touch it and it will be filled by Botoz**.
 
+
 ### The command line
+
+The tasks commands are: 
+
+- `yt-mp3` to turn a youtube video to an mp3
+- `mp3-xml` to create an xml from an mp3
+- `conf-xml` to create a channel xml file from the config file
 
 Once the podcast configuration is done, use the command line this way:
 
 - `./botoz3000.sh your_command your_podcast file_or_url`
 
-For example, to download a youtube video and turn it into a podcast:
-
-Download the files, go to the folder, open a terminal and type:
+For example, to download a youtube video and turn it into a podcast using the default config:
 
 - `./botoz3000.sh yt-mp3 default https://www.youtube.com/watch?v=yBLdQ1a4-JI`
-
-Let the script work, it will return to you a mp3 and an xml file in a folder.
 
 ## Requirements
 
