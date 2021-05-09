@@ -43,8 +43,8 @@ def video_to_show(show, video_url):
 
     print("🤖 Starting downloading your video.💖")
     # Download audio file directly from youtube inside the folder
-    utils.download_audio(video_url, path_folder_file,
-                         show["general"]["youtube-dl_quiet"])
+    # utils.download_audio(video_url, path_folder_file,
+    #                      show["general"]["youtube-dl_quiet"])
     print("🤖 Download complete.")
 
     # Generates the FFMPEG command from the mp3 options
@@ -61,38 +61,45 @@ def video_to_show(show, video_url):
     ffmpeg_title_command = utils.get_ffmpeg_title_cmd(
         ep_title_shortened, show["general"]["ffmpeg_quiet"], path_folder_file + "_encoded.mp3", path_folder_file + "_titled.mp3")
 
-    # Add title
+    # Add title to mp3
     subprocess.run(ffmpeg_title_command, shell=True)
 
+    # Download image for the mp3
+    utils.download_item_image(show["item"]["itunes_image"], path_folder_file)
+
+    # Add image to mp3
     ffmpeg_image_command = utils.get_ffmpeg_image_cmd(
-        "sources/img.jpg", show["general"]["ffmpeg_quiet"], path_folder_file + "_titled.mp3", path_folder_file + ".mp3")
+       path_folder_file + ".jpg", show["general"]["ffmpeg_quiet"], path_folder_file + "_titled.mp3", path_folder_file + ".mp3")
     subprocess.run(ffmpeg_image_command, shell=True)
 
-    # os.remove(path_folder_file + "_encoded.mp3")
-    # os.remove(path_folder_file + "_titled.mp3")
-    # os.rename(path_folder_file + ".mp3",
-    #           path_episode_folder + "/" + show_date + ".mp3")
-    # os.remove(path_folder_file + ".m4a")
-
+    # Create publication date
     ep_pubdate = utils.get_pubdate(
         ep_upload_date, show["item"]["pub_date_hour"])
     ep_duration = utils.get_duration(vid_data['duration'])
 
-    full_xml_content = utils.get_full_xml(
-        show["general"]["main_xml_url"], path_folder_file)
+    # Get today date
+    today = str(datetime.datetime.today()).split(" ", 1) 
+    today = today[0]
 
+    # Download full existing XML
+    full_xml_content = utils.get_full_xml(show["general"]["main_xml_url"], path_episode_folder + "/" + show["general"]["name"]  + "_" + today)
+
+    # Retrive the episode number from the existing xml
     ep_number = utils.get_episode_number(full_xml_content)
 
+    # Retrieve youtube chapters from description
     ep_youtube_chapters = utils.get_youtube_chapters(vid_data["description"])
 
+    # Create the full content for the xml
     ep_content = utils.create_content(
         show["item"]["content_encoded_header"], ep_youtube_chapters, show["item"]["content_encoded_footer"])
 
-    show["item"]["title"] = ep_title
+    # Fill the item object
+    show["item"]["title"] = ep_title_shortened
     show["item"]["link"] = video_url
     show["item"]["guid"] = show_date
     show["item"]["pub_date"] = ep_pubdate
-    show["item"]["itunes_episode"] = ep_number
+    show["item"]["itunes_episode"] = str(ep_number)
     show["item"]["itunes_duration"] = ep_duration
     show["item"]["itunes_subtitle"] = ep_title
     show["item"]["itunes_description"] = ep_title
@@ -100,11 +107,17 @@ def video_to_show(show, video_url):
 
     show["channel"]["last_build_date"] = utils.get_last_build_Date()
 
-    item_text = utils.create_xml_item(show, path_folder_file)
+    # Create XML Item
+    item_text = utils.create_xml_item(show["item"], path_episode_folder + "/" + show_date + "_item.xml")
 
-    legacy_xml = utils.get_full_xml(show["general"]["main_xml_url"], path_folder_file + "/" + today  + "_" + show["general"]["name"])
+    # Insert item into main file
+    utils.insert_item(item_text, path_episode_folder + "/" + show["general"]["name"]  + "_" + today + "_LEGACY.xml", path_episode_folder + "/" + show["general"]["name"]  + "_" + today + "_NEW")
 
-    utils.insert_item(item_text, path_folder_file + "/" + today  + "_" + show["general"]["name"] + "_LEGACY.xml", path_folder_file + "/" + today  + "_" + show["general"]["name"])
-
-    os.remove(path_folder_file + "/" + file + ".json")
+    # Clean files
+    os.remove(path_folder_file + "_encoded.mp3")
+    os.remove(path_folder_file + "_titled.mp3")
+    os.rename(path_folder_file + ".mp3", path_episode_folder + "/" + show_date + ".mp3")
+    os.remove(path_folder_file + ".m4a")
+    os.remove(path_folder_file + ".jpg")
+    os.remove(path_folder_file + ".json")
 
