@@ -11,15 +11,6 @@ def youtube_get_json(url):
     subprocess.run(
         "youtube-dl -q --skip-download --write-info-json -o temp.%\(ext\)s " + url, shell=True)
 
-
-def create_xml_item(data, file):
-    return
-
-
-def check_folder():
-    return
-
-
 def create_folder(folder):
     if os.path.exists(folder):
         print("🤖 The folder for " + folder + " already exists.")
@@ -114,7 +105,7 @@ def get_last_build_Date():
 def get_youtube_chapters(description):
     description_array = description.split("\n")
     is_chapter = False
-    chapters = ""
+    chapters = "\t<ul>"
     for line in description_array:
         if line != "":
             if "00:00" in line:
@@ -123,6 +114,7 @@ def get_youtube_chapters(description):
                 is_chapter = False
             if is_chapter == True:
                 chapters += "<li style ='text-align: justify;'> " + line + " </li>"
+    chapters += "</ul>"
     return chapters
 
 
@@ -136,14 +128,14 @@ def get_full_xml(url, path):
     return myfile.content
 
 def get_episode_number(xml_content):
-    all_episodes = xml_content.findall(
+    all_episodes = re.findall(
         r"<itunes:episode>([0-9]+)<\/itunes:episode>", str(xml_content))
     last_episode = int(str(all_episodes[0]))
     return last_episode + 1
 
 def create_xml_item(show, path):
     item = "<item>\n"
-    item += "\t<title>"+ show["title"] + "</title>\n"
+    item += "\t<title><![CDATA["+ show["title"] + "]]></title>\n"
     item += "\t<link>" + show["link"] + "</link>\n"
     item += "\t<itunes:author>" + show["itunes_author"] + "</itunes:author>\n"
     item += "\t<enclosure url='" + show["enclosure_url"] + "' type='audio/mpeg'/>\n"
@@ -153,10 +145,9 @@ def create_xml_item(show, path):
     item += "\t<itunes:episodeType>" + show["itunes_episode_type"] + "</itunes:episodeType>\n"
     item += "\t<itunes:duration>" + show["itunes_duration"] + "</itunes:duration>\n"
     item += "\t<itunes:image href='" + show["itunes_image"] + "'/>\n"
-    item += "\t<itunes:subtitle>" + show["itunes_subtitle"] + "</itunes:subtitle>\n"
-    item += "\t<description>" + show["itunes_description"] + "</description>\n"
-    item += "\t<content:encoded>\n\t\t" + show["content_encoded_header"] + show["content_encoded_main"] + show["content_encoded_timestamps"] + show["content_encoded_footer"] + "\n"
-    item += "\t</content:encoded>\n"
+    item += "\t<itunes:subtitle><![CDATA[" + show["itunes_subtitle"] + "]]></itunes:subtitle>\n"
+    item += "\t<description><![CDATA[" + show["itunes_description"] + "]]></description>\n"
+    item += "\t<content:encoded>\n\t<![CDATA[" + show["content_encoded_header"] + show["content_encoded_main"] + show["content_encoded_timestamps"] + show["content_encoded_footer"] + "]]></content:encoded>\n"
     item += "</item>"
     if os.path.exists(path):
         os.remove(path)
@@ -172,7 +163,7 @@ def get_metadatas(file, path):
     subprocess.run(command, shell=True)    
 
 def insert_item(item, legacy_location, path):
-    
+
     with open(legacy_location) as f:
         full_xml = re.sub("</itunes:explicit>", "</itunes:explicit>\n\n\n" + item + "\n", str(f.read()), 1)
         full_xml = re.sub("<lastBuildDate>.+<\/lastBuildDate>", "<lastBuildDate>" + get_last_build_Date() + "</lastBuildDate>", full_xml, 1)
@@ -213,3 +204,8 @@ def create_channel_file(show, path):
 
     with open(path, "w") as f:
         f.write(channel)
+
+def download_item_image(url, path):
+    myfile = requests.get(url)
+    open(path + ".jpg", 'wb').write(myfile.content)
+    
