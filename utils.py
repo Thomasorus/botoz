@@ -124,7 +124,7 @@ def create_content(header, chapters, footer):
 
 def get_full_xml(url, path):
     myfile = requests.get(url)
-    open(path + "_LEGACY.xml", 'wb').write(myfile.content)
+    open(path + ".xml", 'wb').write(myfile.content)
     return myfile.content
 
 def get_episode_number(xml_content):
@@ -138,7 +138,7 @@ def create_xml_item(show, path):
     item += "\t<title><![CDATA["+ show["title"] + "]]></title>\n"
     item += "\t<link>" + show["link"] + "</link>\n"
     item += "\t<itunes:author>" + show["itunes_author"] + "</itunes:author>\n"
-    item += "\t<enclosure url='" + show["enclosure_url"] + "' type='audio/mpeg'/>\n"
+    item += "\t<enclosure url='" + show["enclosure_url"] + show["guid"] + ".mp3' type='audio/mpeg'/>\n"
     item += "\t<guid isPermaLink='" + show["guid_permalink"] + "'>" + show["guid"] + "</guid>\n"
     item += "\t<pubDate>" + show["pub_date"] + "</pubDate>\n"
     item += "\t<itunes:episode>" + show["itunes_episode"] + "</itunes:episode>\n"
