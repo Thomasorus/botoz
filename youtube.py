@@ -30,7 +30,7 @@ def video_to_show(show, video_url):
         path_folder_file = show["general"]["name"] + \
             "/" + path_date_id + "/" + path_date_id
 
-    print("This video title is " + ep_title + ".")
+    print("This video title is " + ep_title.decode('utf-8') + ".")
     print("This video date is " + show_date + ".")
 
     # Create needed folders if they don't exist
