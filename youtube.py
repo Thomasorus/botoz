@@ -41,7 +41,7 @@ def video_to_show(show, video_url):
     print("Moving JSON file to " + path_episode_folder)
     shutil.move("temp.info.json", path_folder_file + ".json")
 
-    print("Starting downloading your video.💖")
+    print("Starting downloading your video.")
     # Download audio file directly from youtube inside the folder
     utils.download_audio(video_url, path_folder_file, show["general"]["youtube-dl_quiet"])
     print("Download complete.")
