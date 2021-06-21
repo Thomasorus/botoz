@@ -102,6 +102,7 @@ def video_to_show(show, video_url):
     show["item"]["itunes_subtitle"] = ep_title
     show["item"]["itunes_description"] = ep_title
     show["item"]["content_encoded_timestamps"] = ep_content
+    show["item"]["ep_id"] = ep_id
 
     show["channel"]["last_build_date"] = utils.get_last_build_Date()
 
