@@ -5,7 +5,7 @@ import os
 utils = __import__('utils')
 
 def mp3_to_item(show, file):
-    print("🤖 Recovering the video's JSON file.")
+    print("Recovering the video's JSON file.")
 
     path_show_file = show["general"]["name"] + "/" + file
     utils.create_folder(path_show_file)

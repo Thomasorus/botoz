@@ -13,9 +13,9 @@ def youtube_get_json(url):
 
 def create_folder(folder):
     if os.path.exists(folder):
-        print("🤖 The folder for " + folder + " already exists.")
+        print("The folder for " + folder + " already exists.")
     else:
-        print("🤖 Creating " + folder + " folder.")
+        print("Creating " + folder + " folder.")
         os.makedirs(folder)
 
 
