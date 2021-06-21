@@ -43,13 +43,11 @@ def video_to_show(show, video_url):
 
     print("🤖 Starting downloading your video.💖")
     # Download audio file directly from youtube inside the folder
-    # utils.download_audio(video_url, path_folder_file,
-    #                      show["general"]["youtube-dl_quiet"])
+    utils.download_audio(video_url, path_folder_file, show["general"]["youtube-dl_quiet"])
     print("🤖 Download complete.")
 
     # Generates the FFMPEG command from the mp3 options
-    ffmpeg_encode_command = utils.get_ffmpeg_download_command(
-        show["mp3"], show["general"]["ffmpeg_quiet"], path_folder_file + ".m4a", path_folder_file + "_encoded.mp3")
+    ffmpeg_encode_command = utils.get_ffmpeg_download_command(show["mp3"], show["general"]["ffmpeg_quiet"], path_folder_file + ".m4a", path_folder_file + "_encoded.mp3")
 
     # Convert to mp3
     subprocess.run(ffmpeg_encode_command, shell=True)
