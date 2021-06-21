@@ -80,7 +80,7 @@ def video_to_show(show, video_url):
     today = today[0]
 
     # Download full existing XML
-    full_xml_content = utils.get_full_xml(show["general"]["main_xml_url"], path_episode_folder + "/" + show["general"]["name"]  + "_" + today)
+    full_xml_content = utils.get_full_xml(show["general"]["main_xml_url"], path_episode_folder + "/" + show["general"]["xml_file_name"]  + "-previous")
 
     # Retrive the episode number from the existing xml
     ep_number = utils.get_episode_number(full_xml_content)
@@ -109,7 +109,7 @@ def video_to_show(show, video_url):
     item_text = utils.create_xml_item(show["item"], path_episode_folder + "/" + show_date + "_item.xml")
 
     # Insert item into main file
-    utils.insert_item(item_text, path_episode_folder + "/" + show["general"]["name"]  + "_" + today + "_LEGACY.xml", path_episode_folder + "/" + show["general"]["name"]  + "_" + today + "_NEW")
+    utils.insert_item(item_text, path_episode_folder + "/" + show["general"]["xml_file_name"]  + "-previous.xml", path_episode_folder + "/" + show["general"]["xml_file_name"])
 
     # Clean files
     os.remove(path_folder_file + "_encoded.mp3")
