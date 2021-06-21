@@ -19,7 +19,7 @@ def video_to_show(show, video_url):
     with open("temp.info.json") as f:
         vid_data = json.load(f)
         ep_id = vid_data['id']
-        ep_title = vid_data['title'].strip().decode('utf-8')
+        ep_title = vid_data['title'].strip()
         ep_upload_date = vid_data['upload_date']
 
         show_date = utils.select_date_format(
@@ -30,7 +30,7 @@ def video_to_show(show, video_url):
         path_folder_file = show["general"]["name"] + \
             "/" + path_date_id + "/" + path_date_id
 
-    print("This video title is " + ep_title + ".")
+    # print("This video title is " + ep_title + ".")
     print("This video date is " + show_date + ".")
 
     # Create needed folders if they don't exist
