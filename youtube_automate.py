@@ -58,7 +58,7 @@ if differences:
         path = show_config["item"]["guid"] + "_" + show_config["item"]["ep_id"]
         mp3 = show_config["general"]["name"] + "/" + path + "/" + show_config["item"]["guid"] + ".mp3"
         previous_xml = show_config["general"]["name"] + "/" + path + "/" + show_config["general"]["xml_file_name"] + "-previous.xml"
-        new_xml = show_config["general"]["name"] + "/" + path + "/" + show_config["general"]["xml_file_name"] + "-previous.xml"
+        new_xml = show_config["general"]["name"] + "/" + path + "/" + show_config["general"]["xml_file_name"] + ".xml"
 
         server = ftplib.FTP()
         server.connect(show_config["general"]["ftp_url"])
