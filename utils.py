@@ -60,7 +60,7 @@ def get_ffmpeg_download_command(options, ffmpeg_quiet, input_file, output_file):
     elif options["bitrate"] == "CBR":
         bitrate = "-b:a " + options["CBR_quality"] + "k "
 
-    return "ffmpeg " + loglevel + input_file + frequency + component + bitrate + output_file
+    return "ffmpeg -threads 1" + loglevel + input_file + frequency + component + bitrate + output_file
 
 
 def get_ffmpeg_title_cmd(title, ffmpeg_quiet, input_file, output_file):
@@ -68,7 +68,7 @@ def get_ffmpeg_title_cmd(title, ffmpeg_quiet, input_file, output_file):
         loglevel = "-loglevel fatal -i "
     else:
         loglevel = "-loglevel info -i "
-    return "ffmpeg " + loglevel + input_file + ' -c copy -metadata title="' + \
+    return "ffmpeg -threads 1" + loglevel + input_file + ' -c copy -metadata title="' + \
         title + '" ' + output_file
 
 
@@ -77,7 +77,7 @@ def get_ffmpeg_image_cmd(image_path, ffmpeg_quiet, input_file, output_file):
         loglevel = "-loglevel fatal -i "
     else:
         loglevel = "-loglevel info -i "
-    return "ffmpeg " + loglevel + input_file + " -i " + image_path + " -c copy -map 0 -map 1 " + output_file
+    return "ffmpeg -threads 1" + loglevel + input_file + " -i " + image_path + " -c copy -map 0 -map 1 " + output_file
 
 
 def get_duration(duration):
