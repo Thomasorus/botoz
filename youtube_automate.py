@@ -68,7 +68,8 @@ if differences:
         server.storlines("STOR " + "/" + show_config["general"]["ftp_folder"] + "/" + show_config["general"]["xml_file_name"] + ".xml", open(new_xml, 'rb'))
         server.close()
 
-        json_text = json.dumps(links)
+        cleaned_links = links[:-1]
+        json_text = json.dumps(cleaned_links)
         with open(cache_path, 'w') as f:
             f.write(json_text)
 
