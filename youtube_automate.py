@@ -19,6 +19,7 @@ file_exists = exists(cache_path)
 
 playlist_url = show_config["general"]["playlist_url"]
 Feed = feedparser.parse(playlist_url)
+entries = Feed.entries
 
 # For dev purposes only
 # with open("feed.xml", 'r') as f:
