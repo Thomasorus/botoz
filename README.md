@@ -83,6 +83,18 @@ On windows:
 - `pip3 install requests`
 
 
+## About the `youtube_automate.py` file
+
+The `youtube_automate.py` is used to do the following tasks:
+
+- Check for a new entry inside a youtube playlist RSS Feed
+- If a new video exists, launch botoz to convert it to mp3 + xml
+- Open an FTP connection and upload the new files
+
+Both the youtube playlist RSS feed and FTP connection settings can be filled inside the `config.py` file. Its initial use is automating a daily show made on youtube into a podcast version. This program will only treat the last video added, even if there are others not in the RSS feed, so it's NOT a way to convert an entire playlist into a podcast.
+
+**The automation is not for everyone and you should not use it if you have no experience using FTP, CRON Tasks and overall linux servers**. 
+
 ## About MP3 quality
 
 ### VBR table
