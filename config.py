@@ -11,6 +11,7 @@ podcasts = {
             "youtube-dl_quiet": True,  # True or False
             "ffmpeg_quiet": True,  # True or False
             "date_format": "ISO",  # ISO or EU
+            # Optionnal, for youtube playlist automation only
             "playlist_url": "", # Youtube RSS file when you want to automate the conversion from youtube using the youtube_automate file
             "xml_file_name": "podcast_la-matinale-jv", # The name of xml files you want
             "ftp_folder": "", # The folder in your server where you want to transfer the files
