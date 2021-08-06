@@ -89,8 +89,8 @@ def video_to_show(show, video_url):
     ep_youtube_chapters = utils.get_youtube_chapters(vid_data["description"])
 
     # Create the full content for the xml
-    ep_content = utils.create_content(
-        show["item"]["content_encoded_header"], ep_youtube_chapters, show["item"]["content_encoded_footer"])
+    # ep_content = utils.create_content(
+    #     show["item"]["content_encoded_header"], ep_youtube_chapters, show["item"]["content_encoded_footer"])
 
     # Fill the item object
     show["item"]["title"] = ep_title_shortened
@@ -101,7 +101,7 @@ def video_to_show(show, video_url):
     show["item"]["itunes_duration"] = ep_duration
     show["item"]["itunes_subtitle"] = ep_title
     show["item"]["itunes_description"] = ep_title
-    show["item"]["content_encoded_timestamps"] = ep_content
+    show["item"]["content_encoded_timestamps"] = ep_youtube_chapters
     show["item"]["ep_id"] = ep_id
 
     show["channel"]["last_build_date"] = utils.get_last_build_Date()
