@@ -90,8 +90,8 @@ podcasts = {
             "xml_file_name": "podcast_la-matinale-jv", # The name of xml files you want
             "ftp_folder": "/www/matinale-podcast",
             "ftp_url": "ftp.cluster030.hosting.ovh.net", # FTP url/ip
-            "ftp_login": "gautozf", # FTP login
-            "ftp_password": "baugJES9rind2thon" # FTP password
+            "ftp_login": "", # FTP login
+            "ftp_password": "" # FTP password
         },
 
         # MP3 config
