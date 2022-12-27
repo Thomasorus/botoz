@@ -1,0 +1,5 @@
+youtube-dl
+ffmpeg
+requests
+feedparser
+pysftp
