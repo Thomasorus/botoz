@@ -21,6 +21,7 @@ file_exists = exists(cache_path)
 playlist_url = show_config["general"]["playlist_url"]
 Feed = feedparser.parse(playlist_url)
 entries = Feed.entries
+new_entry = None
 
 # For dev purposes only
 # with open("feed.xml", 'r') as f:
@@ -47,13 +48,13 @@ if file_exists is True:
         if json_list[0] == links[0]:
             print("No changes since last try")
         else:
-            entry = links[0]
+            new_entry = links[0]
             print("New links : " + str(entry))
 
 
-if entry:
-    #subprocess.run("python3 botoz3000.py yt-mp3 matinale " + entry, shell=True)
-    youtube.video_to_show(show_config, entry)
+if new_entry is not None:
+    #subprocess.run("python3 botoz3000.py yt-mp3 matinale " + new_entry, shell=True)
+    youtube.video_to_show(show_config, new_entry)
     path = show_config["item"]["guid"] + "_" + show_config["item"]["ep_id"]
     mp3 = show_config["general"]["name"] + "/" + path + "/" + show_config["item"]["guid"] + ".mp3"
     previous_xml = show_config["general"]["name"] + "/" + path + "/" + show_config["general"]["xml_file_name"] + "-previous.xml"
@@ -71,8 +72,8 @@ if entry:
     if show_config["general"]["connection_type"] == "SFTP":
         server = pysftp.Connection(host=show_config["general"]["sftp_url"],username=show_config["general"]["sftp_user"], password=show_config["general"]["sftp_password"])
         server.put("/" + show_config["general"]["sftp_folder"] + "/" + show_config["item"]["guid"] + ".mp3")
-        server.put("/" + show_config["general"]["ftp_folder"] + "/" + show_config["general"]["xml_file_name"] + "-previous.xml")
-        server.put("/" + show_config["general"]["ftp_folder"] + "/" + show_config["general"]["xml_file_name"] + ".xml")
+        server.put("/" + show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + "-previous.xml")
+        server.put("/" + show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + ".xml")
         server.close()
 
     json_text = json.dumps(links)
