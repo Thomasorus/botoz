@@ -17,6 +17,7 @@ podcasts = {
                 "ftp_url": "", # FTP url/ip
                 "ftp_login": "", # FTP login
                 "ftp_password": "" # FTP password
+                "sftp_folder": "", # SFTP Folder
                 "sftp_url": "" # SFTP url/ip
                 "sftp_login": "", # SFTP login
                 "sftp_password": "" # SFTP password

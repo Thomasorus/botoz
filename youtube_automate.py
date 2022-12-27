@@ -6,6 +6,7 @@ import subprocess
 import ftplib
 import sys
 import shutil
+import pysftp
 
 config_file = __import__('config')
 youtube = __import__('youtube')
@@ -58,13 +59,21 @@ if entry:
     previous_xml = show_config["general"]["name"] + "/" + path + "/" + show_config["general"]["xml_file_name"] + "-previous.xml"
     new_xml = show_config["general"]["name"] + "/" + path + "/" + show_config["general"]["xml_file_name"] + ".xml"
 
-    server = ftplib.FTP()
-    server.connect(show_config["general"]["ftp_url"])
-    server.login(show_config["general"]["ftp_login"],show_config["general"]["ftp_password"])
-    server.storbinary("STOR " + "/" + show_config["general"]["ftp_folder"] + "/" + show_config["item"]["guid"] + ".mp3", open(mp3, 'rb'))
-    server.storlines("STOR " + "/" + show_config["general"]["ftp_folder"] + "/" + show_config["general"]["xml_file_name"] + "-previous.xml", open(previous_xml, 'rb'))
-    server.storlines("STOR " + "/" + show_config["general"]["ftp_folder"] + "/" + show_config["general"]["xml_file_name"] + ".xml", open(new_xml, 'rb'))
-    server.close()
+    if show_config["general"]["connection_type"] == "FTP":
+        server = ftplib.FTP()
+        server.connect(show_config["general"]["ftp_url"])
+        server.login(show_config["general"]["ftp_login"],show_config["general"]["ftp_password"])
+        server.storbinary("STOR " + "/" + show_config["general"]["ftp_folder"] + "/" + show_config["item"]["guid"] + ".mp3", open(mp3, 'rb'))
+        server.storlines("STOR " + "/" + show_config["general"]["ftp_folder"] + "/" + show_config["general"]["xml_file_name"] + "-previous.xml", open(previous_xml, 'rb'))
+        server.storlines("STOR " + "/" + show_config["general"]["ftp_folder"] + "/" + show_config["general"]["xml_file_name"] + ".xml", open(new_xml, 'rb'))
+        server.close()
+
+    if show_config["general"]["connection_type"] == "SFTP":
+        server = pysftp.Connection(host=show_config["general"]["sftp_url"],username=show_config["general"]["sftp_user"], password=show_config["general"]["sftp_password"])
+        server.put("/" + show_config["general"]["sftp_folder"] + "/" + show_config["item"]["guid"] + ".mp3")
+        server.put("/" + show_config["general"]["ftp_folder"] + "/" + show_config["general"]["xml_file_name"] + "-previous.xml")
+        server.put("/" + show_config["general"]["ftp_folder"] + "/" + show_config["general"]["xml_file_name"] + ".xml")
+        server.close()
 
     json_text = json.dumps(links)
     with open(cache_path, 'w') as f:
