@@ -17,11 +17,11 @@ podcasts = {
             "ftp_folder": "", # The folder in your server where you want to transfer the files
             "ftp_url": "", # FTP url/ip
             "ftp_login": "", # FTP login
-            "ftp_password": "" # FTP password
+            "ftp_password": "", # FTP password
             "sftp_folder": "", # SFTP Folder
-            "sftp_url": "" # SFTP url/ip
+            "sftp_url": "", # SFTP url/ip
             "sftp_login": "", # SFTP login
-            "sftp_password": "" # SFTP password
+            "sftp_password": "", # SFTP password
             "connection_type": "SFTP" # Connection wanted: SFTP or FTP
         },
 
