@@ -6,7 +6,8 @@ import subprocess
 import ftplib
 import sys
 import shutil
-import pysftp
+import paramiko
+
 
 config_file = __import__('config')
 youtube = __import__('youtube')
@@ -70,10 +71,14 @@ if new_entry is not None:
         server.close()
 
     if show_config["general"]["connection_type"] == "SFTP":
-        server = pysftp.Connection(host=show_config["general"]["sftp_url"],username=show_config["general"]["sftp_user"], password=show_config["general"]["sftp_password"])
-        server.put("/" + show_config["general"]["sftp_folder"] + "/" + show_config["item"]["guid"] + ".mp3")
-        server.put("/" + show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + "-previous.xml")
-        server.put("/" + show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + ".xml")
+        host,port = show_config["general"]["sftp_url"],22
+        transport = paramiko.Transport((host,port))
+        username,password = show_config["general"]["sftp_user"],show_config["general"]["sftp_password"]
+        transport.connect(None,username,password)
+        sftp = paramiko.SFTPClient.from_transport(transport)
+        sftp.put(mp3, "/" + show_config["general"]["sftp_folder"] + "/" + show_config["item"]["guid"] + ".mp3")
+        sftp.put(previous_xml, "/" + "/" + show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + "-previous.xml")
+        sftp.put(new_xml, "/" + show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + ".xml")
         server.close()
 
     json_text = json.dumps(links)
