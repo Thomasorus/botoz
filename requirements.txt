@@ -1,5 +1,9 @@
-youtube-dl
-ffmpeg
-requests
-feedparser
-paramiko
+System:
+- yt-dlp
+- ffmpeg
+
+pip3:
+- yt_dlp
+- requests
+- feedparser
+- paramiko

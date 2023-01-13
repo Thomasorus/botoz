@@ -2,14 +2,13 @@ import subprocess
 import time
 import datetime
 import os
-import youtube_dl
+import yt_dlp
 import requests
 import re
 
-
 def youtube_get_json(url):
     subprocess.run(
-        "youtube-dl -q --skip-download --write-info-json -o temp.%\(ext\)s " + url, shell=True)
+        "yt-dlp -q --skip-download --write-info-json -o temp.%\(ext\)s " + url, shell=True)
 
 def create_folder(folder):
     if os.path.exists(folder):
@@ -29,7 +28,7 @@ def select_date_format(date_format, date):
 
 def download_audio(url, path, quiet):
     ydl_opts = {
-        'format': 'bestaudio',
+        'format': 'm4a/bestaudio/best',
         'postprocessors': [
             {'key': 'FFmpegExtractAudio', 'preferredcodec': 'm4a'},
             {'key': 'FFmpegMetadata'},
@@ -37,8 +36,8 @@ def download_audio(url, path, quiet):
         "outtmpl": path + ".%(ext)s",
         "quiet": quiet,
     }
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([url])
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        error_code = ydl.download(url)
 
 
 def get_ffmpeg_download_command(options, ffmpeg_quiet, input_file, output_file):
