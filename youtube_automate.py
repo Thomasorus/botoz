@@ -76,9 +76,9 @@ if new_entry is not None:
         username,password = show_config["general"]["sftp_login"],show_config["general"]["sftp_password"]
         transport.connect(None,username,password)
         sftp = paramiko.SFTPClient.from_transport(transport)
-        sftp.put(mp3, "/" + show_config["general"]["sftp_folder"] + "/" + show_config["item"]["guid"] + ".mp3")
-        sftp.put(previous_xml, "/" + "/" + show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + "-previous.xml")
-        sftp.put(new_xml, "/" + show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + ".xml")
+        sftp.put(mp3, show_config["general"]["sftp_folder"] + "/" + show_config["item"]["guid"] + ".mp3")
+        sftp.put(previous_xml, show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + "-previous.xml")
+        sftp.put(new_xml, show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + ".xml")
         server.close()
 
     json_text = json.dumps(links)
