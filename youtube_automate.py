@@ -73,7 +73,7 @@ if new_entry is not None:
     if show_config["general"]["connection_type"] == "SFTP":
         host,port = show_config["general"]["sftp_url"],22
         transport = paramiko.Transport((host,port))
-        username,password = show_config["general"]["sftp_user"],show_config["general"]["sftp_password"]
+        username,password = show_config["general"]["sftp_login"],show_config["general"]["sftp_password"]
         transport.connect(None,username,password)
         sftp = paramiko.SFTPClient.from_transport(transport)
         sftp.put(mp3, "/" + show_config["general"]["sftp_folder"] + "/" + show_config["item"]["guid"] + ".mp3")
