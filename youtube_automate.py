@@ -79,7 +79,7 @@ if new_entry is not None:
         sftp.put(mp3, show_config["general"]["sftp_folder"] + "/" + show_config["item"]["guid"] + ".mp3")
         sftp.put(previous_xml, show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + "-previous.xml")
         sftp.put(new_xml, show_config["general"]["sftp_folder"] + "/" + show_config["general"]["xml_file_name"] + ".xml")
-        server.close()
+        sftp.close()
 
     json_text = json.dumps(links)
     with open(cache_path, 'w') as f:
