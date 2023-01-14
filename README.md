@@ -10,10 +10,9 @@ Botoz can execute 3 tasks:
 - Create an xml file with the `<item>` part prefilled with the metadata found inside an existing mp3 file, then update the main xml file.
 - Create an xml file with the `<channel>` part automatically written from the config file.
 
-
 ## How to use
 
-Botoz3000 needs some configuration steps before being used. Once they are done, those configurations steps can be reused indefinitely.
+BOTOZ needs some configuration steps before being used. Once they are done, those configurations steps can be reused indefinitely.
 
 ### The `config.py` file
 
@@ -53,34 +52,17 @@ For example, to download a youtube video and turn it into a podcast using the de
 
 ## Requirements
 
-You need to install:
+You need to install some dependencies.
 
-- youtube-dl
+System (ise `brew` on mac or `apt-get` on linux):
+- yt-dlp
 - ffmpeg
+
+Python deps (use `pip3 install`):
+- yt_dlp
 - requests
-
-On MacOS you can use Brew to install youtube-dl and ffmpeg:
-
-- `brew install youtube-dl`
-- `brew install ffmpeg`
-
-But you'll also need to use the Python package manager:
-
-- `pip3 install requests`
-
-On Ubuntu:
-
-- `pip3 install youtube-dl`
-- `pip3 install ffmpeg`
-- `pip3 install requests`
-
-On windows:
-
-- **Not tested for now**
-- Download Python 3 [here](https://www.python.org/downloads/)
-- `pip3 install youtube-dl`
-- `pip3 install ffmpeg`
-- `pip3 install requests`
+- feedparser
+- paramiko
 
 
 ## About the `youtube_automate.py` file
@@ -89,11 +71,11 @@ The `youtube_automate.py` is used to do the following tasks:
 
 - Check for a new entry inside a youtube playlist RSS Feed
 - If a new video exists, launch botoz to convert it to mp3 + xml
-- Open an FTP connection and upload the new files
+- Open an FTP or SFTP connection and upload the new files to a distant server
 
 Both the youtube playlist RSS feed and FTP connection settings can be filled inside the `config.py` file. Its initial use is automating a daily show made on youtube into a podcast version. This program will only treat the last video added, even if there are others not in the RSS feed, so it's NOT a way to convert an entire playlist into a podcast.
 
-**The automation is not for everyone and you should not use it if you have no experience using FTP, CRON Tasks and overall linux servers**. 
+**The automation is not for everyone and you should not use it if you have no experience using FTP, SFTP, CRON Tasks and overall linux servers**. 
 
 ## About MP3 quality
 

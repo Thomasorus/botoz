@@ -1,9 +1,0 @@
-System:
-- yt-dlp
-- ffmpeg
-
-pip3:
-- yt_dlp
-- requests
-- feedparser
-- paramiko
